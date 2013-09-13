@@ -1,0 +1,21 @@
+{
+    "name": "anlutro/bulk-sms",
+    "description": "BulkSMS API implementation in PHP.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Lutro",
+            "email": "anlutro@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "anlutro/curl": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "anlutro\\BulkSms": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
