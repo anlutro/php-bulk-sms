@@ -1,17 +1,20 @@
 <?php
-namespace anlutro\BulkSms;
+namespace anlutro\BulkSms\Sender;
 
 use anlutro\cURL\cURL;
+use anlutro\BulkSms\Message;
 
-class BulkSender
+class Bulk
 {
 	protected $url = 'http://bulksms.vsms.net:5567/eapi/submission/send_batch/2/2.0';
 
 	protected $curl;
 
-	public function __construct(cURL $curl)
+	public function __construct($username, $password, $curl = null)
 	{
-		$this->curl = $curl;
+		$this->username = $username;
+		$this->password = $password;
+		$this->curl = $curl ?: new cURL;
 	}
 
 	public function addMessage(Message $message)

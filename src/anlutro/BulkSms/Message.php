@@ -38,6 +38,11 @@ class Message
 		return $this->recipient;
 	}
 
+	public function getMessage()
+	{
+		return $this->message;
+	}
+
 	/**
 	 * Parse a phone number.
 	 *
