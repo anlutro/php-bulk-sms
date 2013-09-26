@@ -1,36 +1,70 @@
 <?php
+/**
+ * BulkSMS PHP implementation
+ *
+ * @author    Andreas Lutro <anlutro@gmail.com>
+ * @license   http://opensource.org/licenses/MIT
+ * @package   anlutro/bulk-sms
+ */
+
 namespace anlutro\BulkSms;
 
+/**
+ * Container class for a single SMS message.
+ */
 class Message
 {
+	/**
+	 * Phone number of the recipient.
+	 *
+	 * @var string
+	 */
 	protected $recipient;
+
+	/**
+	 * The text message to be sent.
+	 *
+	 * @var string
+	 */
 	protected $message;
 
-	public function __construct(array $options = array())
-	{
-		$defaults = [];
-
-		// defaults appended to options, doesn't overwrite
-		$options += $defaults;
-	}
-
+	/**
+	 * Set the recipient.
+	 *
+	 * @param  string|int $recipient
+	 */
 	public function recipient($recipient)
 	{
 		$this->recipient = $this->parseNumber($recipient);
 		return $this;
 	}
 
+	/**
+	 * Set the message.
+	 *
+	 * @param  string $message
+	 */
 	public function message($message)
 	{
 		$this->message = $this->encodeMessage($message);
 		return $this;
 	}
 
+	/**
+	 * Get the recipient.
+	 *
+	 * @return string
+	 */
 	public function getRecipient()
 	{
 		return $this->recipient;
 	}
 
+	/**
+	 * Get the message.
+	 *
+	 * @return string
+	 */
 	public function getMessage()
 	{
 		return $this->message;
@@ -83,6 +117,13 @@ class Message
 		return $number;
 	}
 
+	/**
+	 * Encode a message to the retarded GSM-charset.
+	 *
+	 * @param  string $message
+	 *
+	 * @return string
+	 */
 	protected function encodeMessage($message)
 	{
 		$replaceCharacters = array(
