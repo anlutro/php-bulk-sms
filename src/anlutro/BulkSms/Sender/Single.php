@@ -32,6 +32,6 @@ class Single
 			'msisdn' => $this->message->getRecipient(),
 		];
 
-		$this->curl->post($this->url, [], $data);
+		return $this->curl->post($this->url, [], $data);
 	}
 }
