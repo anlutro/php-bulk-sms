@@ -3,8 +3,10 @@ namespace anlutro\BulkSms\Laravel;
 
 use Illuminate\Support\ServiceProvider;
 
-class BulkSmsServiceProvider
+class BulkSmsServiceProvider extends ServiceProvider
 {
+	protected $defer = false;
+
 	public function register()
 	{
 		$this->app['bulksms'] = $this->app->share(function($app) {
