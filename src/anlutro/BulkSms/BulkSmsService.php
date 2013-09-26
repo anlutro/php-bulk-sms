@@ -62,8 +62,9 @@ class BulkSmsService
 	{
 		$msg = new Message;
 
-		$msg->sender($this->sender)
-			->recipient($recipient)
+		// $msg->sender($this->sender);
+		
+		$msg->recipient($recipient)
 			->message($message);
 		
 		return $msg;
