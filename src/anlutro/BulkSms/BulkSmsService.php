@@ -41,6 +41,8 @@ class BulkSmsService
 
 		$sender->setMessage($msg);
 
+		dd($msg, $sender);
+
 		return $sender->send();
 	}
 

@@ -8,10 +8,15 @@ class BulkSmsServiceProvider
 	public function register()
 	{
 		$this->app['bulksms'] = $this->app->share(function($app) {
-			$username = $app['config']->get('bulksms::username');
-			$password = $app['config']->get('bulksms::password');
+			$username = $app['config']->get('bulk-sms::username');
+			$password = $app['config']->get('bulk-sms::password');
 			return new BulkSmsService($username, $password);
 		});
+	}
+
+	public function boot()
+	{
+		$this->package('anlutro/bulk-sms');
 	}
 
 	public function provides()
