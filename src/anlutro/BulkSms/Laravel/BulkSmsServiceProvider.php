@@ -9,7 +9,6 @@
 
 namespace anlutro\BulkSms\Laravel;
 
-use anlutro\BulkSms\BulkSmsService;
 use Illuminate\Support\ServiceProvider;
 
 /**
