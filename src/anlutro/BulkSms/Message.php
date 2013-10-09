@@ -29,6 +29,20 @@ class Message
 	protected $message;
 
 	/**
+	 * Whether or not the message needs to be concatenated.
+	 *
+	 * @var bool
+	 */
+	protected $concat = false;
+
+	/**
+	 * Where to start concatenating SMSes.
+	 *
+	 * @var integer
+	 */
+	protected $concatLimit = 140;
+
+	/**
 	 * Set the recipient.
 	 *
 	 * @param  string|int $recipient
@@ -47,6 +61,11 @@ class Message
 	public function message($message)
 	{
 		$this->message = $this->encodeMessage($message);
+
+		if (strlen($this->message) > $this->concatLimit) {
+			$this->concat = true;
+		}
+
 		return $this;
 	}
 
@@ -71,17 +90,48 @@ class Message
 	}
 
 	/**
+	 * Get how many SMSes the message may have to be concatenated into.
+	 *
+	 * @return int
+	 */
+	public function getConcatParts()
+	{
+		if (!$this->concat) {
+			return 1;
+		} else {
+			return $this->calculateConcat();
+		}
+	}
+
+	/**
+	 * Calculate from the message string how many SMSes it may have to span.
+	 *
+	 * @return int
+	 */
+	protected function calculateConcat()
+	{
+		$len = strlen($this->message);
+		$i = $this->concatLimit;
+		$j = 1;
+
+		while ($i < $len) {
+			$i += $this->concatLimit;
+			$j++;
+		}
+
+		return $j;
+	}
+
+	/**
 	 * Parse a phone number.
 	 *
-	 * @param  int|string $number
+	 * @param  string $number
 	 *
 	 * @return string
 	 */
 	protected function parseNumber($number)
 	{
-		if (is_int($number)) {
-			$number = (string) $number;
-		}
+		$number = (string) $number;
 
 		// remove whitespaces
 		$number = trim($number);
@@ -104,7 +154,7 @@ class Message
 
 		// is phone number is less than 9 characters, assume we need to append
 		// the norwegian country code (47)
-		if (strlen($number) >= 8) {
+		if (strlen($number) <= 8) {
 			$number = '47' . $number;
 		}
 
@@ -140,6 +190,7 @@ class Message
 		$message = utf8_decode($message);
 		$message = str_replace('"', '\"', $message);
 		$message = strtr($message, $replaceCharacters);
+
 		return $message;
 	}
 }

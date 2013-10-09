@@ -30,6 +30,7 @@ class Single
 			'password' => $this->password,
 			'message' => $this->message->getMessage(),
 			'msisdn' => $this->message->getRecipient(),
+			'concat_text_sms_max_parts' => $this->message->getConcatParts(),
 		];
 
 		return $this->curl->post($this->url, [], $data);
