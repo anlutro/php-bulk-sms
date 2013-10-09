@@ -33,6 +33,13 @@ class Single
 			'concat_text_sms_max_parts' => $this->message->getConcatParts(),
 		];
 
+		$concat = $this->message->getConcatParts();
+
+		if ($concat > 1) {
+			$data['allow_concat_text_sms'] = 1;
+			$data['concat_text_sms_max_parts'] = $this->message->getConcatParts();
+		}
+
 		return $this->curl->post($this->url, [], $data);
 	}
 }
