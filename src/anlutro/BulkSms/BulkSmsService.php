@@ -114,6 +114,11 @@ class BulkSmsService
 		}
 
 		$parts = explode('|', $response->body);
+
+		if (!is_numeric($parts[0])) {
+			throw new \UnexpectedValueException('Unknown response code: ' . $parts[0] . ' - full response: ' . $response->body);
+		}
+
 		$code = (int) $parts[0];
 
 		if ($code === 0 || $code === 1) {

@@ -3,6 +3,11 @@ use Mockery as m;
 
 class BulkSmsServiceTest extends PHPUnit_Framework_TestCase
 {
+	public function tearDown()
+	{
+		m::close();
+	}
+
 	public function testSendSingleSuccess()
 	{
 		$expectedPostData = array(
@@ -48,7 +53,7 @@ class BulkSmsServiceTest extends PHPUnit_Framework_TestCase
 		);
 		$mockResponse = new StdClass;
 		$mockResponse->code = '200 OK';
-		$mockResponse->body = 'xx|ERROR|12345678';
+		$mockResponse->body = '99|ERROR|12345678';
 		$curl = $this->mockCurl();
 		$curl->shouldReceive('post')->once()->andReturn($mockResponse);
 		$bsms = $this->makeService('foo', 'bar', $curl);
