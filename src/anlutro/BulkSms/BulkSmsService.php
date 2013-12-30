@@ -31,6 +31,25 @@ class BulkSmsService
 	protected $password;
 
 	/**
+	 * Meaning of response status codes.
+	 *
+	 * @var array
+	 */
+	protected static $statusMessages = array(
+		0 => 'In progress',
+		1 => 'Scheduled',
+		22 => 'Internal fatal error',
+		23 => 'Authentication error',
+		24 => 'Data validation failed',
+		25 => 'Insufficient credits',
+		26 => 'Upstream credits not available',
+		27 => 'Daily quota exceeded',
+		28 => 'Upstream quota exceeded',
+		40 => 'Temporarily unavailable',
+		201 => 'Maximum batch size exceeded',
+	);
+
+	/**
 	 * @param string $username BulkSMS username
 	 * @param string $password BulkSMS password
 	 * @param anlutro\cURL\cURL $curl  (optional) If you have an existing
@@ -95,11 +114,15 @@ class BulkSmsService
 		}
 
 		$parts = explode('|', $response->body);
+		$code = (int) $parts[0];
 
-		if ($parts[0] === '0' && $parts[1] === 'IN_PROGRESS') {
+		if ($code === 0 || $code === 1) {
 			return true;
 		} else {
-			throw new BulkSmsException('BulkSMS API responded with code: ' . $parts[0] . ' - ' . $parts[1]);
+			$message = array_key_exists($code, static::$statusMessages)
+				? static::$statusMessages[$code]
+				: $parts[1];
+			throw new BulkSmsException('BulkSMS API responded with code: ' . $code . ' - ' . $message);
 		}
 	}
 
