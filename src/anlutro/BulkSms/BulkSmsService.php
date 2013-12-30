@@ -43,6 +43,14 @@ class BulkSmsService
 		$this->curl = $curl ?: new cURL;
 	}
 
+	/**
+	 * Send a single message.
+	 *
+	 * @param  string $recipient
+	 * @param  string $message
+	 *
+	 * @return mixed
+	 */
 	public function sendMessage($recipient, $message)
 	{
 		$sender = $this->createMessageSender();
@@ -51,9 +59,16 @@ class BulkSmsService
 
 		$sender->setMessage($msg);
 
-		return $sender->send();
+		return $this->parseResponse($sender->send());
 	}
 
+	/**
+	 * Send messages in bulk.
+	 *
+	 * @param  array  $messages associative array of recipient => message
+	 *
+	 * @return mixed
+	 */
 	public function sendBulkMessages(array $messages)
 	{
 		$sender = $this->createBulkSender();
@@ -63,9 +78,39 @@ class BulkSmsService
 			$sender->addMessage($msg);
 		}
 
-		return $sender->send();
+		return $this->parseResponse($sender->send());
 	}
 
+	/**
+	 * Parse a response from the API.
+	 *
+	 * @param  anlutro\cURL\Response $response
+	 *
+	 * @return boolean
+	 */
+	public function parseResponse($response)
+	{
+		if ($response->code !== '200 OK') {
+			throw new BulkSmsException('BulkSMS API responded with HTTP status code ' . $response->code);
+		}
+
+		$parts = explode('|', $response->body);
+
+		if ($parts[0] === '0' && $parts[1] === 'IN_PROGRESS') {
+			return true;
+		} else {
+			throw new BulkSmsException('BulkSMS API responded with code: ' . $parts[0] . ' - ' . $parts[1]);
+		}
+	}
+
+	/**
+	 * Create a message instance.
+	 *
+	 * @param  string $recipient
+	 * @param  string $message
+	 *
+	 * @return anlutro\BulkSms\Message
+	 */
 	protected function createMessage($recipient, $message)
 	{
 		$msg = new Message;
@@ -76,11 +121,21 @@ class BulkSmsService
 		return $msg;
 	}
 
+	/**
+	 * Create a message sender instance.
+	 *
+	 * @return anlutro\BulkSms\Sender\Single
+	 */
 	protected function createMessageSender()
 	{
 		return new Sender\Single($this->username, $this->password, $this->curl);
 	}
 
+	/**
+	 * Create a message sender instance.
+	 *
+	 * @return anlutro\BulkSms\Sender\Bulk
+	 */
 	protected function createBulkSender()
 	{
 		return new Sender\Bulk($this->username, $this->password, $this->curl);

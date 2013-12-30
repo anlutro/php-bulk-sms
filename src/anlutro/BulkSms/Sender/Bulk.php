@@ -27,7 +27,7 @@ class Bulk
 	/**
 	 * The cURL instance.
 	 *
-	 * @var [type]
+	 * @var anlutro\cURL\cURL
 	 */
 	protected $curl;
 
@@ -37,7 +37,7 @@ class Bulk
 	 * @param anlutro\cURL\cURL $curl  (optional) If you have an existing
 	 *   instance of my cURL wrapper, you can pass it.
 	 */
-	public function __construct($username, $password, $curl = null)
+	public function __construct($username, $password, cURL $curl = null)
 	{
 		$this->username = $username;
 		$this->password = $password;
@@ -85,7 +85,7 @@ class Bulk
 			'batch_data' => $this->generateCSV(),
 		];
 
-		return $this->curl->post($this->url, [], $data);
+		return $this->curl->post($this->url, $data);
 	}
 
 	/**

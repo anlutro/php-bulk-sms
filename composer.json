@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "anlutro/curl": "0.2.*"
+        "anlutro/curl": "0.3.*"
     },
     "require-dev": {
         "mockery/mockery": "dev-master"
