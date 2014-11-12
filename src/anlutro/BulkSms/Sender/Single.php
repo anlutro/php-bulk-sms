@@ -9,8 +9,8 @@
 
 namespace anlutro\BulkSms\Sender;
 
-use anlutro\cURL\cURL;
 use anlutro\BulkSms\Message;
+use anlutro\cURL\cURL;
 
 /**
  * Class for sending single messages.
@@ -44,10 +44,13 @@ class Single
 	 * @param anlutro\cURL\cURL $curl  (optional) If you have an existing
 	 *   instance of my cURL wrapper, you can pass it.
 	 */
-	public function __construct($username, $password, cURL $curl = null)
+    public function __construct($username, $password, cURL $curl = null, $url = null)
 	{
 		$this->username = $username;
 		$this->password = $password;
+        if ($url) {
+            $this->url = $url;
+        }
 		$this->curl = $curl ?: new cURL;
 	}
 
