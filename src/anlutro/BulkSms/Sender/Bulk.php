@@ -22,7 +22,7 @@ class Bulk
 	 *
 	 * @var string
 	 */
-	protected $url = 'http://bulksms.vsms.net:5567/eapi/submission/send_batch/2/2.0';
+	protected $url = 'http://bulksms.vsms.net:5567/eapi/submission/send_batch/1/1.0';
 
 	/**
 	 * The cURL instance.
