@@ -11,7 +11,7 @@
     "require": {
         "php": ">=5.4.0",
       "anlutro/curl": "0.3.*",
-      "respect/validation": "0.9.*@dev",
+      "respect/validation": "0.8.*",
       "codeception/codeception": "*"
     },
     "require-dev": {
