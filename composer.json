@@ -11,11 +11,11 @@
     "require": {
         "php": ">=5.4.0",
       "anlutro/curl": "0.3.*",
-      "respect/validation": "0.9.*@dev",
-      "codeception/codeception": "*"
+      "respect/validation": "0.8.*@stable"
     },
     "require-dev": {
-        "mockery/mockery": "dev-master"
+      "mockery/mockery": "dev-master",
+      "codeception/codeception": "*"
     },
     "autoload": {
         "psr-0": {
