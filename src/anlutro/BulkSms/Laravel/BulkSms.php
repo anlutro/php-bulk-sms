@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Facade;
  */
 class BulkSms extends Facade
 {
-	/**
-	 * The facade accessor.
-	 *
-	 * @return string
-	 */
-	protected static function getFacadeAccessor()
-	{
-		return 'bulksms';
-	}
+    /**
+     * The facade accessor.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'bulksms';
+    }
 }

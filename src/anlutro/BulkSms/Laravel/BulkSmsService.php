@@ -16,19 +16,20 @@ use Illuminate\Support\Facades\View;
  */
 class BulkSmsService extends \anlutro\BulkSms\BulkSmsService
 {
-	/**
-	 * Send a view with data to a recipient. Made to imitate Laravel's
-	 * Mail::send syntax.
-	 *
-	 * @param  string $view
-	 * @param  array  $data
-	 * @param  string $recipient Phone number
-	 *
-	 * @return void
-	 */
-	public function send($view, $data, $recipient)
-	{
-		$message = View::make($view, $data)->render();
-		return $this->sendMessage($recipient, $message);
-	}
+    /**
+     * Send a view with data to a recipient. Made to imitate Laravel's
+     * Mail::send syntax.
+     *
+     * @param  string $view
+     * @param  array  $data
+     * @param  string $recipient Phone number
+     *
+     * @return mixed
+     */
+    public function send($view, $data, $recipient)
+    {
+        $message = View::make($view, $data)->render();
+
+        return $this->sendMessage($recipient, $message);
+    }
 }
