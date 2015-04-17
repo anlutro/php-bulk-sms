@@ -35,13 +35,12 @@ class BulkSmsServiceProvider extends ServiceProvider
             function ($app) {
                 $username  = $app[ 'config' ]->get('bulk-sms::username');
                 $password  = $app[ 'config' ]->get('bulk-sms::password');
-                $singleurl = $app[ 'config' ]->get('bulk-sms::singleurl');
-                $bulkurl   = $app[ 'config' ]->get('bulk-sms::bulkurl');
+                $baseurl        = $app[ 'config' ]->get('bulk-sms::baseurl');
 
                 if (isset($app[ 'curl' ])) {
-                    return new BulkSmsService($username, $password, $app[ 'curl' ], $singleurl, $bulkurl);
+                    return new BulkSmsService($username, $password, $baseurl, $app[ 'curl' ]);
                 } else {
-                    return new BulkSmsService($username, $password, null, $singleurl, $bulkurl);
+                    return new BulkSmsService($username, $password, $baseurl, null);
                 }
             }
         );
