@@ -14,44 +14,128 @@ namespace anlutro\BulkSms;
  */
 class Message
 {
-	/**
-	 * Phone number of the recipient.
-	 *
-	 * @var string
-	 */
-	protected $recipient;
+    /**
+     * Phone number of the recipient.
+     *
+     * @var string
+     */
+    protected $recipient;
 
-	/**
-	 * The text message to be sent.
-	 *
-	 * @var string
-	 */
-	protected $message;
+    /**
+     * The text message to be sent.
+     *
+     * @var string
+     */
+    protected $message;
 
-	/**
-	 * Whether or not the message needs to be concatenated.
-	 *
-	 * @var bool
-	 */
-	protected $concat = false;
+    /**
+     * Whether or not the message needs to be concatenated.
+     *
+     * @var bool
+     */
+    protected $concat = false;
 
-	/**
-	 * Where to start concatenating SMSes.
-	 *
-	 * @var integer
-	 */
-	protected $concatLimit = 140;
+    /**
+     * Where to start concatenating SMSes.
+     *
+     * @var integer
+     */
+    protected $concatLimit = 140;
 
-	/**
-	 * Set the recipient.
-	 *
-	 * @param  string|int $recipient
-	 */
-	public function recipient($recipient)
-	{
-		$this->recipient = $this->parseNumber($recipient);
-		return $this;
-	}
+    /**
+     * @param $recipient
+     * @param $text
+     */
+    public function __construct($recipient, $text)
+    {
+        $this->setRecipient($recipient);
+        $this->setMessage($text);
+    }
+
+    /**
+     * Get the recipient.
+     *
+     * @return string
+     */
+    public function getRecipient()
+    {
+        return $this->recipient;
+    }
+
+    /**
+     * Set the recipient.
+     *
+     * @param  string|int $recipient
+     *
+     * @return $this
+     */
+    protected function setRecipient($recipient)
+    {
+        $this->recipient = $this->parseNumber($recipient);
+
+        return $this;
+    }
+
+    /**
+     * Get the message.
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set the message.
+     *
+     * @param  string $message
+     *
+     * @return $this
+     */
+    protected function setMessage($message)
+    {
+        $this->message = $this->encodeMessage($message);
+
+        if (strlen($this->message) > $this->concatLimit) {
+            $this->concat = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get how many SMSes the message may have to be concatenated into.
+     *
+     * @return int
+     */
+    public function getConcatParts()
+    {
+        if (!$this->concat) {
+            return 1;
+        } else {
+            return $this->calculateConcat();
+        }
+    }
+
+    /**
+     * Calculate from the message string how many SMSes it may have to span.
+     *
+     * @return int
+     */
+    protected function calculateConcat()
+    {
+        $len = strlen($this->message);
+        $i   = $this->concatLimit;
+        $j   = 1;
+
+        while ($i < $len) {
+            $i += $this->concatLimit;
+            $j++;
+        }
+
+        return $j;
+    }
 
     /**
      * Parse a phone number.
@@ -91,37 +175,15 @@ class Message
             );
         }
 
-        // phone number should be 11 or 10 characters at this point
-//		$len = strlen($number);
-//		if ($len > 11 || $len < 10) {
-//			throw new \InvalidArgumentException("Invalid SMS recipient: $number");
-//		}
-
         return $number;
     }
 
-	/**
-	 * Set the message.
-	 *
-	 * @param  string $message
-	 */
-	public function message($message)
-	{
-		$this->message = $this->encodeMessage($message);
-
-		if (strlen($this->message) > $this->concatLimit) {
-			$this->concat = true;
-		}
-
-		return $this;
-	}
-
-	/**
+    /**
      * Encode a message to the retarded GSM-charset.
      *
      * @param  string $message
      *
-*@return string
+     * @return string
      */
     protected function encodeMessage($message)
     {
@@ -172,58 +234,5 @@ class Message
         $message = strtr($message, $replaceCharacters);
 
         return $message;
-	}
-
-    /**
-     * Get the recipient.
-	 *
-	 * @return string
-     */
-    public function getRecipient()
-    {
-        return $this->recipient;
-	}
-
-    /**
-     * Get the message.
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-	}
-
-    /**
-     * Get how many SMSes the message may have to be concatenated into.
-	 *
-	 * @return int
-     */
-    public function getConcatParts()
-    {
-        if (!$this->concat) {
-            return 1;
-        } else {
-            return $this->calculateConcat();
-		}
-	}
-
-    /**
-     * Calculate from the message string how many SMSes it may have to span.
-     *
-     * @return int
-     */
-    protected function calculateConcat()
-    {
-        $len = strlen($this->message);
-        $i   = $this->concatLimit;
-        $j   = 1;
-
-        while ($i < $len) {
-            $i += $this->concatLimit;
-            $j++;
-        }
-
-        return $j;
-	}
+    }
 }

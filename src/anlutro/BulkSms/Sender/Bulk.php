@@ -9,104 +9,106 @@
 
 namespace anlutro\BulkSms\Sender;
 
+use anlutro\BulkSms\BulkSmsException;
+use anlutro\BulkSms\Laravel\BulkSmsService;
 use anlutro\BulkSms\Message;
-use anlutro\cURL\cURL;
+use anlutro\cURL\Response;
 
 /**
  * Class for sending messages in bulk.
  */
-class Bulk
+class Bulk extends ASender
 {
-	/**
-	 * The URL the call should go to.
-	 *
-	 * @var string
-	 */
-	protected $url = 'http://bulksms.vsms.net:5567/eapi/submission/send_batch/1/1.0';
+    /**
+     * The endpoint the call should go to.
+     *
+     * @var string
+     */
+    protected $endpoint = '/eapi/submission/send_batch/1/1.0';
 
-	/**
-	 * The cURL instance.
-	 *
-	 * @var anlutro\cURL\cURL
-	 */
-	protected $curl;
+    /**
+     * Add a message to the batch.
+     *
+     * @param Message $message
+     */
+    public function addMessage(Message $message)
+    {
+        $this->messages[ ] = $message;
+    }
 
-	/**
-	 * @param string $username BulkSMS username
-	 * @param string $password BulkSMS password
-	 * @param anlutro\cURL\cURL $curl  (optional) If you have an existing
-	 *   instance of my cURL wrapper, you can pass it.
-	 */
-    public function __construct($username, $password, cURL $curl = null, $url = null)
-	{
-		$this->username = $username;
-		$this->password = $password;
-        if ($url) {
-            $this->url = $url;
+    /**
+     * Send the queued messages.
+     *
+     * @return mixed
+     */
+    public function send($testmode = false)
+    {
+        if (empty($this->messages)) {
+            return false;
         }
-		$this->curl = $curl ?: new cURL;
-	}
 
-	/**
-	 * Add a message to the batch.
-	 *
-	 * @param Message $message
-	 */
-	public function addMessage(Message $message)
-	{
-		$this->messages[] = $message;
-	}
+        $data = [
+            'username'   => $this->username,
+            'password'   => $this->password,
+            'batch_data' => $this->generateCSV(),
+        ];
 
-	/**
-	 * Add several messages at once to the batch.
-	 *
-	 * @param array $messages
-	 */
-	public function addMessages(array $messages)
-	{
-		$filteredMessages = array_filter($messages, function($message) {
-			return ($message instanceof Message);
-		});
+        // add test params if required
+        if ($testmode) {
+            if ($testmode == BulkSmsService::$TEST_ALWAYS_SUCCEED) {
+                $data[ 'test_always_succeed' ] = 1;
+            } elseif ($testmode == BulkSmsService::$TEST_ALWAYS_FAIL) {
+                $data[ 'test_always_fail' ] = 1;
+            }
+        }
 
-		$this->messages =+ $filteredMessages;
-	}
+        return $this->curl->post($this->getUrl(), $data);
+    }
 
-	/**
-	 * Send the queued messages.
-	 *
-	 * @return mixed
-	 */
-	public function send()
-	{
-		if (empty($this->messages)) {
-			return;
-		}
+    /**
+     * Generate the CSV to send.
+     *
+     * @return string
+     */
+    protected function generateCSV()
+    {
+        $str = "msisdn,message";
 
-		$data = [
-			'username' => $this->username,
-			'password' => $this->password,
-			'batch_data' => $this->generateCSV(),
-		];
+        foreach ($this->messages as $message) {
+            $str .= "\n";
+            $recipient = $message->getRecipient();
+            $message   = $message->getMessage();
+            $str .= '"' . $recipient . '","' . $message . '"';
+        }
 
-		return $this->curl->post($this->url, $data);
-	}
+        return $str;
+    }
 
-	/**
-	 * Generate the CSV to send.
-	 *
-	 * @return string
-	 */
-	protected function generateCSV()
-	{
-		$str = "msisdn,message";
+    /**
+     * Extract response from Sender - depends on sender
+     *
+     * @param Response $response
+     *
+     * @return array('status_code', 'status_description', 'batch_id')
+     * @throws BulkSmsException
+     */
+    public function extractResponse(Response $response)
+    {
+        $expected = array('status_code', 'status_description', 'batch_id');
+        $parts    = explode('|', $response->body);
+        $it       = new \ArrayIterator($parts);
+        if (count($expected) != $it->count()) {
+            throw new BulkSmsException(
+                "Count of BulkSMS response does not match expectations!. Return: " . $response->body
+            );
+        }
 
-		foreach ($this->messages as $message) {
-			$str .=  "\n";
-			$recipient = $message->getRecipient();
-			$message = $message->getMessage();
-			$str .= '"'.$recipient.'","'.$message.'"';
-		}
+        $toreturn = [];
+        foreach ($expected as $item) {
+            $toreturn[ $item ] = $it->current();
+            $it->next();
+        }
 
-		return $str;
-	}
+        return $toreturn;
+    }
 }

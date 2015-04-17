@@ -1,5 +1,5 @@
 <?php
 return array(
-	'username' => 'REPLACEME',
-	'password' => 'REPLACEME',
+    'username' => 'REPLACEME',
+    'password' => 'REPLACEME',
 );
