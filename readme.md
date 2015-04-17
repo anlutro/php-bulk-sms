@@ -19,10 +19,26 @@ The package includes files to make usage super easy in Laravel 4.
 
 ## Usage
 
+Send Single Message
 ```php
-$bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password');
+$bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
 $bulkSms->sendMessage('12345678', 'Hello there!');
 ```
+
+Send Bulk Message
+```php
+$message1 = new \anlutro\BulkSms\Message("12345678", "Hi there");
+$message2 = new \anlutro\BulkSms\Message("12345678", "Hello again");
+$bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
+$bulkSms->sendMessage(array($message1,$message2));
+```
+
+Get Status report
+```php
+$bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
+$bulkSms->getStatusForBatchId(693099785);
+```
+
 
 In Laravel 4, you don't need to construct `$bulkSms`, and you can replace `$bulkSms->` with `BulkSms::` provided you followed the installation steps above.
 
