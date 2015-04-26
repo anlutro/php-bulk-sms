@@ -17,7 +17,7 @@ use anlutro\cURL\Response;
 /**
  * Class for sending messages in bulk.
  */
-class Bulk extends ASender
+class Bulk extends AbstractSender
 {
     /**
      * The endpoint the call should go to.
@@ -33,7 +33,7 @@ class Bulk extends ASender
      */
     public function addMessage(Message $message)
     {
-        $this->messages[ ] = $message;
+        $this->messages[] = $message;
     }
 
     /**
@@ -55,10 +55,10 @@ class Bulk extends ASender
 
         // add test params if required
         if ($testmode) {
-            if ($testmode == BulkSmsService::$TEST_ALWAYS_SUCCEED) {
-                $data[ 'test_always_succeed' ] = 1;
-            } elseif ($testmode == BulkSmsService::$TEST_ALWAYS_FAIL) {
-                $data[ 'test_always_fail' ] = 1;
+            if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
+                $data['test_always_succeed'] = 1;
+            } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
+                $data['test_always_fail'] = 1;
             }
         }
 
@@ -105,7 +105,7 @@ class Bulk extends ASender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[ $item ] = $it->current();
+            $toreturn[$item] = $it->current();
             $it->next();
         }
 

@@ -17,13 +17,12 @@ use Respect\Validation\Validator as v;
  */
 class BulkSmsService
 {
-    public static $TEST_ALWAYS_SUCCEED = 1;
-    public static $TEST_ALWAYS_FAIL = 2;
+    const TEST_ALWAYS_SUCCEED = 1;
+    const TEST_ALWAYS_FAIL = 2;
+
     /**
      * Meaning of response status codes.
-
-
-*
+     *
      * @var array
      */
     protected static $statusMessages = array(
@@ -42,35 +41,43 @@ class BulkSmsService
         40  => 'Temporarily unavailable',
         201 => 'Maximum batch size exceeded',
     );
-    protected $test_mode = false;
+
+    /**
+     * Whether test mode is enabled.
+     *
+     * @var boolean
+     */
+    protected $testMode = false;
+
     /**
      * BulkSMS username
      *
      * @var string
      */
     protected $username;
+
     /**
      * BulkSMS password
      *
      * @var string
      */
     protected $password;
-    /**
-     * @var null
-     */
-    protected $baseurl;
 
     /**
-     * @param string            $username BulkSMS username
-     * @param string            $password BulkSMS password
-     * @param string            $baseurl
-     * @param anlutro\cURL\cURL $curl     (optional) If you have an existing
-     *                                    instance of my cURL wrapper, you can pass it.
+     * @var string
      */
-    public function __construct($username, $password, $baseurl = "http://bulksms.vsms.net:5567", $curl = null)
+    protected $baseUrl;
+
+    /**
+     * @param string $username BulkSMS username
+     * @param string $password BulkSMS password
+     * @param string $baseUrl  Optional - defaults to "http://bulksms.vsms.net:5567"
+     * @param cURL   $curl     Optional - a new instance will be constructed if null is passed.
+     */
+    public function __construct($username, $password, $baseUrl = "http://bulksms.vsms.net:5567", $curl = null)
     {
-        v::url()->setName("Base Bulksms URL")->check($baseurl);
-        $this->baseurl  = $baseurl;
+        v::url()->setName("Base Bulksms URL")->check($baseUrl);
+        $this->baseUrl  = $baseUrl;
         $this->username = $username;
         $this->password = $password;
         $this->curl     = $curl ?: new cURL();
@@ -83,16 +90,13 @@ class BulkSmsService
      */
     public function setTestMode($mode)
     {
-        if (BulkSmsService::$TEST_ALWAYS_SUCCEED == $mode) {
-            $this->test_mode = BulkSmsService::$TEST_ALWAYS_SUCCEED;
-
-            return;
-        } elseif (BulkSmsService::$TEST_ALWAYS_FAIL == $mode) {
-            $this->test_mode = BulkSmsService::$TEST_ALWAYS_FAIL;
-
-            return;
+        if (BulkSmsService::TESTALWAYS_SUCCEED == $mode) {
+            $this->testMode = BulkSmsService::TESTALWAYS_SUCCEED;
+        } elseif (BulkSmsService::TESTALWAYS_FAIL == $mode) {
+            $this->testMode = BulkSmsService::TESTALWAYS_FAIL;
+        } else {
+            throw new \InvalidArgumentException("Invalid test mode: " . $mode);
         }
-        throw new \InvalidArgumentException("Invalid test mode: " . $mode);
     }
 
     /**
@@ -110,7 +114,7 @@ class BulkSmsService
         $msg = $this->createMessage($recipient, $message);
 
         $sender->setMessage($msg);
-        $response = $sender->send($this->test_mode);
+        $response = $sender->send($this->testMode);
         $this->validateResponse($response);
 
         return $sender->extractResponse($response);
@@ -123,7 +127,7 @@ class BulkSmsService
      */
     protected function createMessageSender()
     {
-        return new Sender\Single($this->username, $this->password, $this->baseurl, $this->curl);
+        return new Sender\Single($this->username, $this->password, $this->baseUrl, $this->curl);
     }
 
     /**
@@ -155,22 +159,22 @@ class BulkSmsService
 
         $parts = explode('|', $response->body);
 
-        if (!is_numeric($parts[ 0 ])) {
+        if (!is_numeric($parts[0])) {
             throw new \UnexpectedValueException(
-                'Unknown response code: ' . $parts[ 0 ] . ' - full response: ' . $response->body
+                'Unknown response code: ' . $parts[0] . ' - full response: ' . $response->body
             );
         }
 
-        $code = (int) $parts[ 0 ];
+        $code = (int) $parts[0];
 
         if ($code === 0 || $code === 1) {
             return true;
-        } else {
-            $message = array_key_exists($code, static::$statusMessages)
-                ? static::$statusMessages[ $code ]
-                : $parts[ 1 ];
-            throw new BulkSmsException('BulkSMS API responded with code: ' . $code . ' - ' . $message);
         }
+
+        $message = array_key_exists($code, static::$statusMessages)
+            ? static::$statusMessages[$code]
+            : $parts[1];
+        throw new BulkSmsException('BulkSMS API responded with code: ' . $code . ' - ' . $message);
     }
 
     /**
@@ -190,7 +194,8 @@ class BulkSmsService
             v::instance('anlutro\BulkSms\Message')->check($message);
             $sender->addMessage($message);
         }
-        $response = $sender->send($this->test_mode);
+
+        $response = $sender->send($this->testMode);
         $this->validateResponse($response);
 
         return $sender->extractResponse($response);
@@ -203,7 +208,7 @@ class BulkSmsService
      */
     protected function createBulkSender()
     {
-        return new Sender\Bulk($this->username, $this->password, $this->baseurl, $this->curl);
+        return new Sender\Bulk($this->username, $this->password, $this->baseUrl, $this->curl);
     }
 
     /**
@@ -216,7 +221,7 @@ class BulkSmsService
     public function getStatusForBatchId($bulksmsid)
     {
         $sender   = $this->createBulkStatusSender();
-        $response = $sender->getStatusForBatchId($bulksmsid, $this->test_mode);
+        $response = $sender->getStatusForBatchId($bulksmsid, $this->testMode);
         $this->validateResponse($response);
 
         return $sender->extractResponse($response);
@@ -229,6 +234,6 @@ class BulkSmsService
      */
     protected function createBulkStatusSender()
     {
-        return new Sender\Status($this->username, $this->password, $this->baseurl, $this->curl);
+        return new Sender\Status($this->username, $this->password, $this->baseUrl, $this->curl);
     }
 }

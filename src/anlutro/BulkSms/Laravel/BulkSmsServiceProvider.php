@@ -31,14 +31,14 @@ class BulkSmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app[ 'bulksms' ] = $this->app->share(
+        $this->app['bulksms'] = $this->app->share(
             function ($app) {
-                $username  = $app[ 'config' ]->get('bulk-sms::username');
-                $password  = $app[ 'config' ]->get('bulk-sms::password');
-                $baseurl        = $app[ 'config' ]->get('bulk-sms::baseurl');
+                $username  = $app['config']->get('bulk-sms::username');
+                $password  = $app['config']->get('bulk-sms::password');
+                $baseurl   = $app['config']->get('bulk-sms::baseurl');
 
-                if (isset($app[ 'curl' ])) {
-                    return new BulkSmsService($username, $password, $baseurl, $app[ 'curl' ]);
+                if (isset($app['curl'])) {
+                    return new BulkSmsService($username, $password, $baseurl, $app['curl']);
                 } else {
                     return new BulkSmsService($username, $password, $baseurl, null);
                 }

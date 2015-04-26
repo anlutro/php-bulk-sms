@@ -17,7 +17,7 @@ use anlutro\cURL\Response;
 /**
  * Class for sending single messages.
  */
-class Single extends ASender
+class Single extends AbstractSender
 {
     /**
      * The URL the call should go to.
@@ -60,16 +60,16 @@ class Single extends ASender
         $concat = $this->message->getConcatParts();
 
         if ($concat > 1) {
-            $data[ 'allow_concat_text_sms' ]     = 1;
-            $data[ 'concat_text_sms_max_parts' ] = $concat;
+            $data['allow_concat_text_sms']     = 1;
+            $data['concat_text_sms_max_parts'] = $concat;
         }
 
         // add test params if required
         if ($testmode) {
-            if ($testmode == BulkSmsService::$TEST_ALWAYS_SUCCEED) {
-                $data[ 'test_always_succeed' ] = 1;
-            } elseif ($testmode == BulkSmsService::$TEST_ALWAYS_FAIL) {
-                $data[ 'test_always_fail' ] = 1;
+            if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
+                $data['test_always_succeed'] = 1;
+            } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
+                $data['test_always_fail'] = 1;
             }
         }
 
@@ -97,7 +97,7 @@ class Single extends ASender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[ $item ] = $it->current();
+            $toreturn[$item] = $it->current();
             $it->next();
         }
 

@@ -15,7 +15,7 @@ use anlutro\cURL\Response;
 /**
  * Class for getting the message status
  */
-class Status extends ASender
+class Status extends AbstractSender
 {
     /**
      * The URL the call should go to.
@@ -86,12 +86,11 @@ class Status extends ASender
 
             $status = [];
             foreach ($expected as $statusitem) {
-                $status[ $statusitem ] = $it->current();
+                $status[$statusitem] = $it->current();
                 $it->next();
 
             }
-            $toreturn[ ] = $status;
-
+            $toreturn[] = $status;
         }
 
         return $toreturn;

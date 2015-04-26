@@ -6,6 +6,10 @@
         {
             "name": "Andreas Lutro",
             "email": "anlutro@gmail.com"
+        },
+        {
+            "name": "Michael Nowag",
+            "email": "<michael.nowag@maviance.com>"
         }
     ],
     "require": {
