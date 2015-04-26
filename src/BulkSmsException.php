@@ -9,4 +9,6 @@
 
 namespace anlutro\BulkSms;
 
-class BulkSmsException extends \Exception {}
+class BulkSmsException extends \Exception
+{
+}

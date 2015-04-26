@@ -3,65 +3,57 @@ use Mockery as m;
 
 class MessageConcatTest extends PHPUnit_Framework_TestCase
 {
-	public function setUp()
-	{
-		$this->msg = new anlutro\BulkSms\Message;
-	}
+    protected $msg;
 
-	public function tearDown()
-	{
-		$this->msg = null;
-	}
+    public function testSingleMessageConcat()
+    {
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(1));
+        $this->assertMsgConcat(1);
 
-	public function testSingleMessageConcat()
-	{
-		$this->msg->message($this->generateStrlen(1));
-		$this->assertMsgConcat(1);
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(140));
+        $this->assertMsgConcat(1);
 
-		$this->msg->message($this->generateStrlen(140));
-		$this->assertMsgConcat(1);
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(141));
+        $this->assertMsgConcat(2);
+    }
 
-		$this->msg->message($this->generateStrlen(141));
-		$this->assertMsgConcat(2);
-	}
+    protected function generateStrlen($len)
+    {
+        $str = '';
 
-	public function testDoubleMessageConcat()
-	{
-		$this->msg->message($this->generateStrlen(161));
-		$this->assertMsgConcat(2);
+        for ($i = 0; $i < $len; $i++) {
+            $str .= 'x';
+        }
 
-		$this->msg->message($this->generateStrlen(280));
-		$this->assertMsgConcat(2);
+        return $str;
+    }
 
-		$this->msg->message($this->generateStrlen(281));
-		$this->assertMsgConcat(3);
-	}
+    protected function assertMsgConcat($concat)
+    {
+        $this->assertEquals($concat, $this->msg->getConcatParts());
+    }
 
-	public function testTripleMessageConcat()
-	{
-		$this->msg->message($this->generateStrlen(321));
-		$this->assertMsgConcat(3);
+    public function testDoubleMessageConcat()
+    {
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(161));
+        $this->assertMsgConcat(2);
 
-		$this->msg->message($this->generateStrlen(420));
-		$this->assertMsgConcat(3);
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(280));
+        $this->assertMsgConcat(2);
 
-		$this->msg->message($this->generateStrlen(421));
-		$this->assertMsgConcat(4);
-	}
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(281));
+        $this->assertMsgConcat(3);
+    }
 
-	protected function assertMsgConcat($concat)
-	{
-		$this->assertEquals($concat, $this->msg->getConcatParts());
-	}
+    public function testTripleMessageConcat()
+    {
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(321));
+        $this->assertMsgConcat(3);
 
-	protected function generateStrlen($len)
-	{
-		$str = '';
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(420));
+        $this->assertMsgConcat(3);
 
-		for ($i = 0; $i < $len; $i++) {
-			$str .= 'x';
-		}
-
-		return $str;
-	}
+        $this->msg = new \anlutro\BulkSms\Message(1111111111, $this->generateStrlen(421));
+        $this->assertMsgConcat(4);
+    }
 }

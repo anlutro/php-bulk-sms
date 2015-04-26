@@ -6,18 +6,23 @@
         {
             "name": "Andreas Lutro",
             "email": "anlutro@gmail.com"
+        },
+        {
+            "name": "Michael Nowag",
+            "email": "michael.nowag@maviance.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "anlutro/curl": "0.3.*"
+        "anlutro/curl": "0.3.*",
+        "respect/validation": "0.8.*"
     },
     "require-dev": {
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "0.9.*"
     },
     "autoload": {
-        "psr-0": {
-            "anlutro\\BulkSms": "src/"
+        "psr-4": {
+            "anlutro\\BulkSms\\": "src/"
         }
     },
     "minimum-stability": "dev"
