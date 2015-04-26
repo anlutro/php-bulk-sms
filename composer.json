@@ -10,12 +10,11 @@
     ],
     "require": {
         "php": ">=5.4.0",
-      "anlutro/curl": "0.3.*",
-      "respect/validation": "0.8.*@stable"
+        "anlutro/curl": "0.3.*",
+        "respect/validation": "0.8.*"
     },
     "require-dev": {
-      "mockery/mockery": "dev-master",
-      "codeception/codeception": "*"
+        "mockery/mockery": "0.9.*"
     },
     "autoload": {
         "psr-0": {
