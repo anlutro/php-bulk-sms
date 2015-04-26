@@ -9,7 +9,7 @@
         },
         {
             "name": "Michael Nowag",
-            "email": "<michael.nowag@maviance.com>"
+            "email": "michael.nowag@maviance.com"
         }
     ],
     "require": {
@@ -21,8 +21,8 @@
         "mockery/mockery": "0.9.*"
     },
     "autoload": {
-        "psr-0": {
-            "anlutro\\BulkSms": "src/"
+        "psr-4": {
+            "anlutro\\BulkSms\\": "src/"
         }
     },
     "minimum-stability": "dev"

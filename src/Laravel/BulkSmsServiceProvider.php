@@ -9,6 +9,7 @@
 
 namespace anlutro\BulkSms\Laravel;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -33,9 +34,15 @@ class BulkSmsServiceProvider extends ServiceProvider
     {
         $this->app['bulksms'] = $this->app->share(
             function ($app) {
-                $username  = $app['config']->get('bulk-sms::username');
-                $password  = $app['config']->get('bulk-sms::password');
-                $baseurl   = $app['config']->get('bulk-sms::baseurl');
+                if (version_compare(Application::VERSION, '5.0', '>=')) {
+                    $username  = $app['config']->get('bulk-sms.username');
+                    $password  = $app['config']->get('bulk-sms.password');
+                    $baseurl   = $app['config']->get('bulk-sms.baseurl');
+                } else {
+                    $username  = $app['config']->get('bulk-sms::username');
+                    $password  = $app['config']->get('bulk-sms::password');
+                    $baseurl   = $app['config']->get('bulk-sms::baseurl');
+                }
 
                 if (isset($app['curl'])) {
                     return new BulkSmsService($username, $password, $baseurl, $app['curl']);
@@ -44,6 +51,11 @@ class BulkSmsServiceProvider extends ServiceProvider
                 }
             }
         );
+
+        if (version_compare(Application::VERSION, '5.0', '>=')) {
+            $dir = dirname(dirname(__DIR__)).'/resources';
+            $this->mergeConfigFrom($dir.'/config.php', 'bulk-sms');
+        }
     }
 
     /**
@@ -53,8 +65,15 @@ class BulkSmsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $path = realpath($this->guessPackagePath() . '/..');
-        $this->package('anlutro/bulk-sms', 'bulk-sms', $path);
+        $dir = dirname(dirname(__DIR__)).'/resources';
+
+        if (version_compare(Application::VERSION, '5.0', '>=')) {
+            $this->publishes([
+                $dir.'/config.php' => config_path('bulk-sms.php')
+            ], 'config');
+        } else {
+            $this->app['config']->package('bulk-sms', $dir, 'bulk-sms');
+        }
     }
 
     /**
