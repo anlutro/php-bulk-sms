@@ -90,10 +90,10 @@ class BulkSmsService
      */
     public function setTestMode($mode)
     {
-        if (BulkSmsService::TESTALWAYS_SUCCEED == $mode) {
-            $this->testMode = BulkSmsService::TESTALWAYS_SUCCEED;
-        } elseif (BulkSmsService::TESTALWAYS_FAIL == $mode) {
-            $this->testMode = BulkSmsService::TESTALWAYS_FAIL;
+        if (BulkSmsService::TEST_ALWAYS_SUCCEED == $mode) {
+            $this->testMode = BulkSmsService::TEST_ALWAYS_SUCCEED;
+        } elseif (BulkSmsService::TEST_ALWAYS_FAIL == $mode) {
+            $this->testMode = BulkSmsService::TEST_ALWAYS_FAIL;
         } else {
             throw new \InvalidArgumentException("Invalid test mode: " . $mode);
         }

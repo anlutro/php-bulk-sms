@@ -9,13 +9,21 @@ This package requires PHP 5.4 because I'm too lazy to type `array()`. Sorry.
 
 Using composer: `composer require anlutro/bulk-sms` - list of versions is available through GitHub's tag list.
 
-### Laravel 4
+### Laravel
 
-The package includes files to make usage super easy in Laravel 4.
+The package includes files to make usage super easy in Laravel 4 and higher.
 
 1. Add `anlutro\BulkSms\Laravel\BulkSmsServiceProvider` to the list of providers in `app/config/app.php`.
 2. Run `php artisan config:publish anlutro/bulk-sms`. Edit the config file in `app/config/packages/anlutro/bulk-sms` and fill in your username and password.
 3. (optional) Add an alias for the facade by adding `'BulkSms' => 'anlutro\BulkSms\Laravel\BulkSms'` to aliases in `app/config/app.php`.
+
+## Credentials
+
+To use this library you need create an account with Bulksms. They support several sub-sites for specific regions.
+
+1. Username : Bulksms login
+2. Password : Bulksms login password
+3. Baseurl : Bulksms sub-site to connect to (e.g. "http://bulksms.com" or "http://bulksms.de")
 
 ## Usage
 
@@ -39,8 +47,27 @@ $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl')
 $bulkSms->getStatusForBatchId(693099785);
 ```
 
+## Send test messages
 
-In Laravel 4, you don't need to construct `$bulkSms`, and you can replace `$bulkSms->` with `BulkSms::` provided you followed the installation steps above.
+BulkSms suports test modes (SUCCESS and FAIL) that validate the message and return defined responses without really sending out SMS. In order to send messages in test mode, run the following:
+
+Send message that will return a success:
+
+```php
+$bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
+$bulkSms->setTestMode(\anlutro\BulkSms\BulkSmsService::TEST_ALWAYS_SUCCEED);
+$bulkSms->getStatusForBatchId(693099785);
+```
+
+Send message that will return a failure response - and thus trigger a BulkSmsException :
+
+```php
+$bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
+$bulkSms->setTestMode(\anlutro\BulkSms\BulkSmsService::TEST_ALWAYS_FAIL);
+$bulkSms->getStatusForBatchId(693099785);
+```
+
+In Laravel, you don't need to construct `$bulkSms`, and you can replace `$bulkSms->` with `BulkSms::` provided you followed the installation steps above.
 
 # Contact
 Open an issue on GitHub if you have any problems or suggestions.

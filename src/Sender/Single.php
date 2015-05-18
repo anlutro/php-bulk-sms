@@ -46,6 +46,8 @@ class Single extends AbstractSender
     /**
      * Send the message.
      *
+     * @param bool $testmode Testmode to use
+     *
      * @return mixed
      */
     public function send($testmode = false)
@@ -66,9 +68,9 @@ class Single extends AbstractSender
 
         // add test params if required
         if ($testmode) {
-            if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
+            if ($testmode == BulkSmsService::TEST_ALWAYS_SUCCEED) {
                 $data['test_always_succeed'] = 1;
-            } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
+            } elseif ($testmode == BulkSmsService::TEST_ALWAYS_FAIL) {
                 $data['test_always_fail'] = 1;
             }
         }
