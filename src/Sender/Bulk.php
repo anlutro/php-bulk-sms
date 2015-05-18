@@ -27,17 +27,26 @@ class Bulk extends AbstractSender
     protected $endpoint = '/eapi/submission/send_batch/1/1.0';
 
     /**
+     * Message container
+     *
+     * @var array
+     */
+    protected $messages;
+
+    /**
      * Add a message to the batch.
      *
      * @param Message $message
      */
     public function addMessage(Message $message)
     {
-        $this->messages[] = $message;
+        $this->messages[ ] = $message;
     }
 
     /**
      * Send the queued messages.
+     *
+     * @param bool $testmode Testmode to use
      *
      * @return mixed
      */
@@ -55,10 +64,10 @@ class Bulk extends AbstractSender
 
         // add test params if required
         if ($testmode) {
-            if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
-                $data['test_always_succeed'] = 1;
-            } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
-                $data['test_always_fail'] = 1;
+            if ($testmode == BulkSmsService::TEST_ALWAYS_SUCCEED) {
+                $data[ 'test_always_succeed' ] = 1;
+            } elseif ($testmode == BulkSmsService::TEST_ALWAYS_FAIL) {
+                $data[ 'test_always_fail' ] = 1;
             }
         }
 
@@ -105,7 +114,7 @@ class Bulk extends AbstractSender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[$item] = $it->current();
+            $toreturn[ $item ] = $it->current();
             $it->next();
         }
 
