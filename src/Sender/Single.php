@@ -15,73 +15,65 @@ use anlutro\BulkSms\Message;
 use anlutro\cURL\Response;
 
 /**
- * Class for sending messages in bulk.
+ * Class for sending single messages.
  */
-class Bulk extends ASender
+class Single extends AbstractSender
 {
     /**
-     * The endpoint the call should go to.
+     * The URL the call should go to.
      *
      * @var string
      */
-    protected $endpoint = '/eapi/submission/send_batch/1/1.0';
+    protected $endpoint = '/eapi/submission/send_sms/2/2.0';
 
     /**
-     * Add a message to the batch.
+     * The message to send.
      *
-     * @param Message $message
+     * @var anlutro\BulkSms\Message
      */
-    public function addMessage(Message $message)
+    protected $message;
+
+    /**
+     * Set the message.
+     *
+     * @param anlutro\BulkSms\Message $message
+     */
+    public function setMessage(Message $message)
     {
-        $this->messages[ ] = $message;
+        $this->message = $message;
     }
 
     /**
-     * Send the queued messages.
+     * Send the message.
      *
      * @return mixed
      */
     public function send($testmode = false)
     {
-        if (empty($this->messages)) {
-            return false;
-        }
-
         $data = [
-            'username'   => $this->username,
-            'password'   => $this->password,
-            'batch_data' => $this->generateCSV(),
+            'username' => $this->username,
+            'password' => $this->password,
+            'message'  => $this->message->getMessage(),
+            'msisdn'   => $this->message->getRecipient(),
         ];
+
+        $concat = $this->message->getConcatParts();
+
+        if ($concat > 1) {
+            $data['allow_concat_text_sms']     = 1;
+            $data['concat_text_sms_max_parts'] = $concat;
+        }
 
         // add test params if required
         if ($testmode) {
-            if ($testmode == BulkSmsService::$TEST_ALWAYS_SUCCEED) {
-                $data[ 'test_always_succeed' ] = 1;
-            } elseif ($testmode == BulkSmsService::$TEST_ALWAYS_FAIL) {
-                $data[ 'test_always_fail' ] = 1;
+            if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
+                $data['test_always_succeed'] = 1;
+            } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
+                $data['test_always_fail'] = 1;
             }
         }
 
         return $this->curl->post($this->getUrl(), $data);
-    }
-
-    /**
-     * Generate the CSV to send.
-     *
-     * @return string
-     */
-    protected function generateCSV()
-    {
-        $str = "msisdn,message";
-
-        foreach ($this->messages as $message) {
-            $str .= "\n";
-            $recipient = $message->getRecipient();
-            $message   = $message->getMessage();
-            $str .= '"' . $recipient . '","' . $message . '"';
-        }
-
-        return $str;
     }
 
     /**
@@ -105,7 +97,7 @@ class Bulk extends ASender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[ $item ] = $it->current();
+            $toreturn[$item] = $it->current();
             $it->next();
         }
 
