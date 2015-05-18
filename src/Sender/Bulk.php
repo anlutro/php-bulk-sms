@@ -27,6 +27,13 @@ class Bulk extends AbstractSender
     protected $endpoint = '/eapi/submission/send_batch/1/1.0';
 
     /**
+     * Message container
+     *
+     * @var array
+     */
+    protected $messages;
+
+    /**
      * Add a message to the batch.
      *
      * @param Message $message
@@ -38,6 +45,8 @@ class Bulk extends AbstractSender
 
     /**
      * Send the queued messages.
+     *
+     * @param bool $testmode Testmode to use
      *
      * @return mixed
      */
@@ -55,9 +64,9 @@ class Bulk extends AbstractSender
 
         // add test params if required
         if ($testmode) {
-            if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
+            if ($testmode == BulkSmsService::TEST_ALWAYS_SUCCEED) {
                 $data[ 'test_always_succeed' ] = 1;
-            } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
+            } elseif ($testmode == BulkSmsService::TEST_ALWAYS_FAIL) {
                 $data[ 'test_always_fail' ] = 1;
             }
         }
