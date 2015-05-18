@@ -32,20 +32,20 @@ class BulkSmsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['bulksms'] = $this->app->share(
+        $this->app[ 'bulksms' ] = $this->app->share(
             function ($app) {
                 if (version_compare(Application::VERSION, '5.0', '>=')) {
-                    $username  = $app['config']->get('bulk-sms.username');
-                    $password  = $app['config']->get('bulk-sms.password');
-                    $baseurl   = $app['config']->get('bulk-sms.baseurl');
+                    $username = $app[ 'config' ]->get('bulk-sms.username');
+                    $password = $app[ 'config' ]->get('bulk-sms.password');
+                    $baseurl  = $app[ 'config' ]->get('bulk-sms.baseurl');
                 } else {
-                    $username  = $app['config']->get('bulk-sms::username');
-                    $password  = $app['config']->get('bulk-sms::password');
-                    $baseurl   = $app['config']->get('bulk-sms::baseurl');
+                    $username = $app[ 'config' ]->get('bulk-sms::username');
+                    $password = $app[ 'config' ]->get('bulk-sms::password');
+                    $baseurl  = $app[ 'config' ]->get('bulk-sms::baseurl');
                 }
 
-                if (isset($app['curl'])) {
-                    return new BulkSmsService($username, $password, $baseurl, $app['curl']);
+                if (isset($app[ 'curl' ])) {
+                    return new BulkSmsService($username, $password, $baseurl, $app[ 'curl' ]);
                 } else {
                     return new BulkSmsService($username, $password, $baseurl, null);
                 }
@@ -53,8 +53,8 @@ class BulkSmsServiceProvider extends ServiceProvider
         );
 
         if (version_compare(Application::VERSION, '5.0', '>=')) {
-            $dir = dirname(dirname(__DIR__)).'/resources';
-            $this->mergeConfigFrom($dir.'/config.php', 'bulk-sms');
+            $dir = dirname(dirname(__DIR__)) . '/resources';
+            $this->mergeConfigFrom($dir . '/config.php', 'bulk-sms');
         }
     }
 
@@ -65,14 +65,17 @@ class BulkSmsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $dir = dirname(dirname(__DIR__)).'/resources';
+        $dir = dirname(dirname(__DIR__)) . '/resources';
 
         if (version_compare(Application::VERSION, '5.0', '>=')) {
-            $this->publishes([
-                $dir.'/config.php' => config_path('bulk-sms.php')
-            ], 'config');
+            $this->publishes(
+                [
+                    $dir . '/config.php' => config_path('bulk-sms.php')
+                ],
+                'config'
+            );
         } else {
-            $this->app['config']->package('bulk-sms', $dir, 'bulk-sms');
+            $this->app[ 'config' ]->package('bulk-sms', $dir, 'bulk-sms');
         }
     }
 

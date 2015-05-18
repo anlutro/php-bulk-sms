@@ -86,11 +86,11 @@ class Status extends AbstractSender
 
             $status = [];
             foreach ($expected as $statusitem) {
-                $status[$statusitem] = $it->current();
+                $status[ $statusitem ] = $it->current();
                 $it->next();
 
             }
-            $toreturn[] = $status;
+            $toreturn[ ] = $status;
         }
 
         return $toreturn;

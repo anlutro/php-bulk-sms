@@ -33,7 +33,7 @@ class Bulk extends AbstractSender
      */
     public function addMessage(Message $message)
     {
-        $this->messages[] = $message;
+        $this->messages[ ] = $message;
     }
 
     /**
@@ -56,9 +56,9 @@ class Bulk extends AbstractSender
         // add test params if required
         if ($testmode) {
             if ($testmode == BulkSmsService::TESTALWAYS_SUCCEED) {
-                $data['test_always_succeed'] = 1;
+                $data[ 'test_always_succeed' ] = 1;
             } elseif ($testmode == BulkSmsService::TESTALWAYS_FAIL) {
-                $data['test_always_fail'] = 1;
+                $data[ 'test_always_fail' ] = 1;
             }
         }
 
@@ -105,7 +105,7 @@ class Bulk extends AbstractSender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[$item] = $it->current();
+            $toreturn[ $item ] = $it->current();
             $it->next();
         }
 
