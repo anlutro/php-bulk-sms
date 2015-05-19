@@ -72,7 +72,5 @@ In Laravel, you don't need to construct `$bulkSms`, and you can replace `$bulkSm
 # Contact
 Open an issue on GitHub if you have any problems or suggestions.
 
-If you have any questions or want to have a chat, look for anlutro @ chat.freenode.net.
-
 # License
 The contents of this repository is released under the [MIT license](http://opensource.org/licenses/MIT).
