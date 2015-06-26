@@ -56,11 +56,11 @@ class Bulk extends AbstractSender
             return false;
         }
 
-        $data = [
+        $data = array_replace($this->params, [
             'username'   => $this->username,
             'password'   => $this->password,
             'batch_data' => $this->generateCSV(),
-        ];
+        ]);
 
         // add test params if required
         if ($testmode) {

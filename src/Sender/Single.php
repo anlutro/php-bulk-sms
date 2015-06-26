@@ -52,12 +52,12 @@ class Single extends AbstractSender
      */
     public function send($testmode = false)
     {
-        $data = [
+        $data = array_replace($this->params, [
             'username' => $this->username,
             'password' => $this->password,
             'message'  => $this->message->getMessage(),
             'msisdn'   => $this->message->getRecipient(),
-        ];
+        ]);
 
         $concat = $this->message->getConcatParts();
 

@@ -51,6 +51,13 @@ abstract class AbstractSender
     protected $curl;
 
     /**
+     * Additional BulkSMS params
+     *
+     * @var array
+     */
+    protected $params = array();
+
+    /**
      * @param string $username BulkSMS username
      * @param string $password BulkSMS password
      * @param        $baseUrl
@@ -63,6 +70,11 @@ abstract class AbstractSender
         $this->username = $username;
         $this->password = $password;
         $this->curl     = $curl ?: new cURL();
+    }
+
+    public function setParams(array $params)
+    {
+        $this->params = $params;
     }
 
     /**
