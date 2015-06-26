@@ -24,6 +24,7 @@ To use this library you need create an account with Bulksms. They support severa
 1. Username : Bulksms login
 2. Password : Bulksms login password
 3. Baseurl : Bulksms sub-site to connect to (e.g. "http://bulksms.com" or "http://bulksms.de")
+4. Routing Group : A number between 1 and 3 to indicate the Routing Group used by BulkSMS. See BulkSMS API documentation for more details (http://developer.bulksms.com/eapi/)
 
 ## Usage
 
