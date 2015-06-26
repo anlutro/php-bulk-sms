@@ -57,9 +57,10 @@ class Bulk extends AbstractSender
         }
 
         $data = [
-            'username'   => $this->username,
-            'password'   => $this->password,
-            'batch_data' => $this->generateCSV(),
+            'username'      => $this->username,
+            'password'      => $this->password,
+            'batch_data'    => $this->generateCSV(),
+            'routing_group' => $this->routingGroup,
         ];
 
         // add test params if required

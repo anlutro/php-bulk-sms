@@ -53,10 +53,11 @@ class Single extends AbstractSender
     public function send($testmode = false)
     {
         $data = [
-            'username' => $this->username,
-            'password' => $this->password,
-            'message'  => $this->message->getMessage(),
-            'msisdn'   => $this->message->getRecipient(),
+            'username'      => $this->username,
+            'password'      => $this->password,
+            'message'       => $this->message->getMessage(),
+            'msisdn'        => $this->message->getRecipient(),
+            'routing_group' => $this->routingGroup,
         ];
 
         $concat = $this->message->getConcatParts();
