@@ -38,16 +38,18 @@ class BulkSmsServiceProvider extends ServiceProvider
                     $username  = $app['config']->get('bulk-sms.username');
                     $password  = $app['config']->get('bulk-sms.password');
                     $baseurl   = $app['config']->get('bulk-sms.baseurl');
+                    $routinggroup  = $app['config']->get('bulk-sms.routing_group') ?: 2;
                 } else {
                     $username  = $app['config']->get('bulk-sms::username');
                     $password  = $app['config']->get('bulk-sms::password');
                     $baseurl   = $app['config']->get('bulk-sms::baseurl');
+                    $routinggroup  = $app['config']->get('bulk-sms.routing_group') ?: 2;
                 }
 
                 if (isset($app['curl'])) {
-                    return new BulkSmsService($username, $password, $baseurl, $app['curl']);
+                    return new BulkSmsService($username, $password, $baseurl, $routinggroup, $app['curl']);
                 } else {
-                    return new BulkSmsService($username, $password, $baseurl, null);
+                    return new BulkSmsService($username, $password, $baseurl, $routinggroup, null);
                 }
             }
         );

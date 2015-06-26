@@ -44,6 +44,13 @@ abstract class AbstractSender
     protected $baseUrl;
 
     /**
+     * The Routing Group
+     *
+     * @var string
+     */
+    protected $routingGroup;
+
+    /**
      * The cURL instance.
      *
      * @var cURL
@@ -56,13 +63,14 @@ abstract class AbstractSender
      * @param        $baseUrl
      * @param cURL   $curl
      */
-    public function __construct($username, $password, $baseUrl, cURL $curl = null)
+    public function __construct($username, $password, $baseUrl, $routingGroup, cURL $curl = null)
     {
         v::url()->setName("Base Bulksms URL")->check($baseUrl);
         $this->baseUrl  = $baseUrl;
         $this->username = $username;
         $this->password = $password;
         $this->curl     = $curl ?: new cURL();
+        $this->routingGroup = $routingGroup;
     }
 
     /**

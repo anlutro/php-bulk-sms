@@ -69,18 +69,24 @@ class BulkSmsService
     protected $baseUrl;
 
     /**
+     * @var integer
+     */
+    protected $routingGroup;
+
+    /**
      * @param string $username BulkSMS username
      * @param string $password BulkSMS password
      * @param string $baseUrl  Optional - defaults to "http://bulksms.vsms.net:5567"
      * @param cURL   $curl     Optional - a new instance will be constructed if null is passed.
      */
-    public function __construct($username, $password, $baseUrl = "http://bulksms.vsms.net:5567", $curl = null)
+    public function __construct($username, $password, $baseUrl = "http://bulksms.vsms.net:5567", $routingGroup = 2, $curl = null)
     {
         v::url()->setName("Base Bulksms URL")->check($baseUrl);
         $this->baseUrl  = $baseUrl;
         $this->username = $username;
         $this->password = $password;
         $this->curl     = $curl ?: new cURL();
+        $this->routingGroup = $routingGroup;
     }
 
     /**
@@ -127,7 +133,7 @@ class BulkSmsService
      */
     protected function createMessageSender()
     {
-        return new Sender\Single($this->username, $this->password, $this->baseUrl, $this->curl);
+        return new Sender\Single($this->username, $this->password, $this->baseUrl, $this->routingGroup, $this->curl);
     }
 
     /**
@@ -208,7 +214,7 @@ class BulkSmsService
      */
     protected function createBulkSender()
     {
-        return new Sender\Bulk($this->username, $this->password, $this->baseUrl, $this->curl);
+        return new Sender\Bulk($this->username, $this->password, $this->baseUrl, $this->routingGroup, $this->curl);
     }
 
     /**
@@ -234,6 +240,6 @@ class BulkSmsService
      */
     protected function createBulkStatusSender()
     {
-        return new Sender\Status($this->username, $this->password, $this->baseUrl, $this->curl);
+        return new Sender\Status($this->username, $this->password, $this->baseUrl, $this->routingGroup, $this->curl);
     }
 }
