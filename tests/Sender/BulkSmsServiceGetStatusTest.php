@@ -24,7 +24,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'http://bulksms.vsms.net:5567/eapi/status_reports/get_report/2/2.0',
             $expectedGetData
         )->andReturn($mockResponse);
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $this->assertEquals(
             array(array('msisdn' => '1212121', 'status_code' => '11')),
             $bsms->getStatusForBatchId('123445566')
@@ -36,9 +36,9 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
         return m::mock('anlutro\cURL\cURL');
     }
 
-    public function makeService($username, $password, $baseurl, $curl = null)
+    public function makeService($username, $password, $baseurl, $routingGroup = 2, $curl = null)
     {
-        return new anlutro\BulkSms\BulkSmsService($username, $password, $baseurl, $curl);
+        return new anlutro\BulkSms\BulkSmsService($username, $password, $baseurl, $routingGroup, $curl);
     }
 
     public function testMultipleResponseSuccess()
@@ -58,7 +58,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'http://bulksms.vsms.net:5567/eapi/status_reports/get_report/2/2.0',
             $expectedGetData
         )->andReturn($mockResponse);
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $this->assertEquals(
             array(
                 array('msisdn' => '1212121', 'status_code' => '11'),
@@ -84,7 +84,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'http://bulksms.vsms.net:5567/eapi/status_reports/get_report/2/2.0',
             $expectedGetData
         )->andReturn($mockResponse);
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $this->assertEquals(array(), $bsms->getStatusForBatchId('123445566'));
     }
 
@@ -107,7 +107,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'http://bulksms.vsms.net:5567/eapi/status_reports/get_report/2/2.0',
             $expectedGetData
         )->andReturn($mockResponse);
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $bsms->getStatusForBatchId('123445566');
     }
 
@@ -129,7 +129,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'http://bulksms.vsms.net:5567/eapi/status_reports/get_report/2/2.0',
             $expectedGetData
         )->andReturn($mockResponse);
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $this->assertTrue($bsms->getStatusForBatchId('123445566'));
     }
 
@@ -149,7 +149,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'http://bulksms.de/eapi/status_reports/get_report/2/2.0',
             $expectedGetData
         )->andReturn($mockResponse);
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.de', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.de', 2, $curl);
         $this->assertEquals(
             array(array('msisdn' => '1212121', 'status_code' => '11')),
             $bsms->getStatusForBatchId('123445566')

@@ -214,7 +214,7 @@ class BulkSmsService
      */
     protected function createBulkSender()
     {
-        return new Sender\Bulk($this->username, $this->password, $this->baseUrl, $this->curl);
+        return new Sender\Bulk($this->username, $this->password, $this->baseUrl, $this->routingGroup, $this->curl);
     }
 
     /**

@@ -15,7 +15,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
     public function testSendNoMessageSuccess()
     {
         $curl = $this->mockCurl();
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $this->assertEquals(
             array('status_code' => 0, 'status_description' => "IN_PROGRESS", 'batch_id' => 4712345678),
             $bsms->sendBulkMessages(array())
@@ -27,9 +27,9 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
         return m::mock('anlutro\cURL\cURL');
     }
 
-    public function makeService($username, $password, $baseurl, $curl = null)
+    public function makeService($username, $password, $baseurl, $routingGroup = 2, $curl = null)
     {
-        return new anlutro\BulkSms\BulkSmsService($username, $password, $baseurl, $curl);
+        return new anlutro\BulkSms\BulkSmsService($username, $password, $baseurl, $routingGroup, $curl);
     }
 
     /**
@@ -39,7 +39,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
     public function testSendWrongMessageClassSuccess()
     {
         $curl = $this->mockCurl();
-        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $this->assertEquals(
             array('status_code' => 0, 'status_description' => "IN_PROGRESS", 'batch_id' => 4712345678),
             $bsms->sendBulkMessages(array(m::mock('anlutro\cURL\Response')))
@@ -52,6 +52,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             'username'   => 'foo',
             'password'   => 'bar',
             'batch_data' => "msisdn,message\n\"4917610908093\",\"TestText\"",
+            'routing_group' => 2,
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
         $mockResponse->code = '200 OK';
@@ -61,7 +62,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             "http://bulksms.vsms.net:5567/eapi/submission/send_batch/1/1.0",
             $expectedPostData
         )->andReturn($mockResponse);
-        $bsms    = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms    = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $message = new \anlutro\BulkSms\Message("4917610908093", "TestText");
         $this->assertEquals(
             array('status_code' => 0, 'status_description' => "IN_PROGRESS", 'batch_id' => 4712345678),
@@ -75,6 +76,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             'username'   => 'foo',
             'password'   => 'bar',
             'batch_data' => "msisdn,message\n\"4917610908093\",\"TestText\"\n\"4917610908094\",\"TestText2\"",
+            'routing_group' => 2,
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
         $mockResponse->code = '200 OK';
@@ -84,7 +86,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             "http://bulksms.vsms.net:5567/eapi/submission/send_batch/1/1.0",
             $expectedPostData
         )->andReturn($mockResponse);
-        $bsms     = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', $curl);
+        $bsms     = $this->makeService('foo', 'bar', 'http://bulksms.vsms.net:5567', 2, $curl);
         $message1 = new \anlutro\BulkSms\Message("4917610908093", "TestText");
         $message2 = new \anlutro\BulkSms\Message("4917610908094", "TestText2");
         $this->assertEquals(
