@@ -20,8 +20,8 @@ The package includes files to make usage super easy in Laravel 4 and higher.
 ## Credentials
 
 To use this library you need create an account with Bulksms. They support several sub-sites for specific regions.
- 
-1. Username : Bulksms login 
+
+1. Username : Bulksms login
 2. Password : Bulksms login password
 3. Baseurl : Bulksms sub-site to connect to (e.g. "http://bulksms.com" or "http://bulksms.de")
 
@@ -47,12 +47,12 @@ $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl')
 $bulkSms->getStatusForBatchId(693099785);
 ```
 
-## Send test messages 
+## Send test messages
 
 BulkSms suports test modes (SUCCESS and FAIL) that validate the message and return defined responses without really sending out SMS. In order to send messages in test mode, run the following:
 
 Send message that will return a success:
- 
+
 ```php
 $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
 $bulkSms->setTestMode(\anlutro\BulkSms\BulkSmsService::TEST_ALWAYS_SUCCEED);
@@ -60,7 +60,7 @@ $bulkSms->getStatusForBatchId(693099785);
 ```
 
 Send message that will return a failure response - and thus trigger a BulkSmsException :
- 
+
 ```php
 $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
 $bulkSms->setTestMode(\anlutro\BulkSms\BulkSmsService::TEST_ALWAYS_FAIL);
@@ -71,8 +71,6 @@ In Laravel, you don't need to construct `$bulkSms`, and you can replace `$bulkSm
 
 # Contact
 Open an issue on GitHub if you have any problems or suggestions.
-
-If you have any questions or want to have a chat, look for anlutro @ chat.freenode.net.
 
 # License
 The contents of this repository is released under the [MIT license](http://opensource.org/licenses/MIT).

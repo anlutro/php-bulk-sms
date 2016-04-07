@@ -7,22 +7,22 @@
             "name": "Andreas Lutro",
             "email": "anlutro@gmail.com"
         },
-      {
-        "name": "Michael Nowag",
-        "email": "michaelnowag@gmail.com"
+        {
+            "name": "Michael Nowag",
+            "email": "michaelnowag@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-      "anlutro/curl": "0.3.*",
-      "respect/validation": "1.0.*@stable"
+        "anlutro/curl": "0.3.*",
+        "respect/validation": "0.8.*"
     },
     "require-dev": {
-      "mockery/mockery": "0.9.*"
+        "mockery/mockery": "0.9.*"
     },
     "autoload": {
-      "psr-4": {
-        "anlutro\\BulkSms\\": "src/"
+        "psr-4": {
+            "anlutro\\BulkSms\\": "src/"
         }
     },
     "minimum-stability": "dev"

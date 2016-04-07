@@ -104,16 +104,20 @@ class BulkSmsService
      *
      * @param  string $recipient
      * @param  string $message
+     * @param  array  $params
      *
      * @return mixed
      */
-    public function sendMessage($recipient, $message)
+    public function sendMessage($recipient, $message, array $params = null)
     {
         $sender = $this->createMessageSender();
 
         $msg = $this->createMessage($recipient, $message);
 
         $sender->setMessage($msg);
+        if ($params) {
+            $sender->setParams($params);
+        }
         $response = $sender->send($this->testMode);
         $this->validateResponse($response);
 
@@ -181,10 +185,11 @@ class BulkSmsService
      * Send messages in bulk.
      *
      * @param  Message[] $messages
+     * @param  array     $params
      *
      * @return mixed
      */
-    public function sendBulkMessages(array $messages)
+    public function sendBulkMessages(array $messages, array $params = null)
     {
         $sender = $this->createBulkSender();
         v::notEmpty()->setName("BulkSms Array")->check($messages);
@@ -195,6 +200,9 @@ class BulkSmsService
             $sender->addMessage($message);
         }
 
+        if ($params) {
+            $sender->setParams($params);
+        }
         $response = $sender->send($this->testMode);
         $this->validateResponse($response);
 

@@ -52,26 +52,26 @@ class Single extends AbstractSender
      */
     public function send($testmode = false)
     {
-        $data = [
+        $data = array_replace($this->params, [
             'username' => $this->username,
             'password' => $this->password,
             'message'  => $this->message->getMessage(),
             'msisdn'   => $this->message->getRecipient(),
-        ];
+        ]);
 
         $concat = $this->message->getConcatParts();
 
         if ($concat > 1) {
-            $data[ 'allow_concat_text_sms' ]     = 1;
-            $data[ 'concat_text_sms_max_parts' ] = $concat;
+            $data['allow_concat_text_sms']     = 1;
+            $data['concat_text_sms_max_parts'] = $concat;
         }
 
         // add test params if required
         if ($testmode) {
             if ($testmode == BulkSmsService::TEST_ALWAYS_SUCCEED) {
-                $data[ 'test_always_succeed' ] = 1;
+                $data['test_always_succeed'] = 1;
             } elseif ($testmode == BulkSmsService::TEST_ALWAYS_FAIL) {
-                $data[ 'test_always_fail' ] = 1;
+                $data['test_always_fail'] = 1;
             }
         }
 
@@ -99,7 +99,7 @@ class Single extends AbstractSender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[ $item ] = $it->current();
+            $toreturn[$item] = $it->current();
             $it->next();
         }
 

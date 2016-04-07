@@ -40,7 +40,7 @@ class Bulk extends AbstractSender
      */
     public function addMessage(Message $message)
     {
-        $this->messages[ ] = $message;
+        $this->messages[] = $message;
     }
 
     /**
@@ -56,18 +56,18 @@ class Bulk extends AbstractSender
             return false;
         }
 
-        $data = [
+        $data = array_replace($this->params, [
             'username'   => $this->username,
             'password'   => $this->password,
             'batch_data' => $this->generateCSV(),
-        ];
+        ]);
 
         // add test params if required
         if ($testmode) {
             if ($testmode == BulkSmsService::TEST_ALWAYS_SUCCEED) {
-                $data[ 'test_always_succeed' ] = 1;
+                $data['test_always_succeed'] = 1;
             } elseif ($testmode == BulkSmsService::TEST_ALWAYS_FAIL) {
-                $data[ 'test_always_fail' ] = 1;
+                $data['test_always_fail'] = 1;
             }
         }
 
@@ -114,7 +114,7 @@ class Bulk extends AbstractSender
 
         $toreturn = [];
         foreach ($expected as $item) {
-            $toreturn[ $item ] = $it->current();
+            $toreturn[$item] = $it->current();
             $it->next();
         }
 
