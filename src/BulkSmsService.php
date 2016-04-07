@@ -77,7 +77,7 @@ class BulkSmsService
     public function __construct($username, $password, $baseUrl = "http://bulksms.vsms.net:5567", $curl = null)
     {
         v::url()->setName("Base Bulksms URL")->check($baseUrl);
-        $this->baseUrl  = $baseUrl;
+        $this->baseUrl = $baseUrl;
         $this->username = $username;
         $this->password = $password;
         $this->curl     = $curl ?: new cURL();
@@ -163,21 +163,21 @@ class BulkSmsService
 
         $parts = explode('|', $response->body);
 
-        if (!is_numeric($parts[0])) {
+        if (!is_numeric($parts[ 0 ])) {
             throw new \UnexpectedValueException(
-                'Unknown response code: ' . $parts[0] . ' - full response: ' . $response->body
+                'Unknown response code: ' . $parts[ 0 ] . ' - full response: ' . $response->body
             );
         }
 
-        $code = (int) $parts[0];
+        $code = (int) $parts[ 0 ];
 
         if ($code === 0 || $code === 1) {
             return true;
         }
 
         $message = array_key_exists($code, static::$statusMessages)
-            ? static::$statusMessages[$code]
-            : $parts[1];
+            ? static::$statusMessages[ $code ]
+            : $parts[ 1 ];
         throw new BulkSmsException('BulkSMS API responded with code: ' . $code . ' - ' . $message);
     }
 

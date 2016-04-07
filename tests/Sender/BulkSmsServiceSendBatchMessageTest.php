@@ -34,7 +34,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Respect\Validation\Exceptions\InstanceException
-     * @expectedExceptionMessage must be an instance of anlutro\BulkSms\Message
+     * @expectedExceptionMessage must be an instance of "anlutro\\BulkSms\\Message"
      */
     public function testSendWrongMessageClassSuccess()
     {
