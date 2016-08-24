@@ -23,28 +23,42 @@ To use this library you need create an account with Bulksms. They support severa
 
 1. Username : Bulksms login
 2. Password : Bulksms login password
-3. Baseurl : Bulksms sub-site to connect to (e.g. "http://bulksms.com" or "http://bulksms.de")
+3. Baseurl : Bulksms sub-site to connect to (e.g. 'http://bulksms.com' or 'http://bulksms.de')
 
 ## Usage
 
-Send Single Message
+Send a single message:
+
 ```php
 $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
 $bulkSms->sendMessage('12345678', 'Hello there!');
 ```
 
-Send Bulk Message
+Send more than one message at the same time by providing an array of messages:
+
 ```php
-$message1 = new \anlutro\BulkSms\Message("12345678", "Hi there");
-$message2 = new \anlutro\BulkSms\Message("12345678", "Hello again");
+$message1 = new \anlutro\BulkSms\Message('12345678', 'Hi there');
+$message2 = new \anlutro\BulkSms\Message('12345678', 'Hello again');
 $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
 $bulkSms->sendMessage(array($message1,$message2));
 ```
 
-Get Status report
+Get the status of a batch of messages:
+
 ```php
 $bulkSms = new anlutro\BulkSms\BulkSmsService('username', 'password', 'baseurl');
 $bulkSms->getStatusForBatchId(693099785);
+```
+
+## Sending unicode messages
+
+In order to send unicode messages, make sure your message is UTF-16, convert
+them to hexadecimal, and specify the 'dca' parameter:
+
+```php
+$text = 'السلام عليكم';
+$encodedMessage = bin2hex(mb_convert_encoding($text, 'utf-16', 'utf-8')) ; 
+$bulkSms->sendMessage('12345678', $encodedMessage, ['dca' => '16bit']);
 ```
 
 ## Send test messages
