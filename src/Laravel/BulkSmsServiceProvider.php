@@ -41,7 +41,7 @@ class BulkSmsServiceProvider extends ServiceProvider
     {
         $l5 = $this->l5 = version_compare(Application::VERSION, '5.0', '>=');
 
-        $this->app['bulksms'] = $this->app->share(function ($app) use($l5) {
+         $this->app->singleton('bulksms', function ($app)  use($l5) {
             $delim = $l5 ? '.' : '::';
             $config = $app['config'];
             $username  = $config->get("bulk-sms{$delim}username");
