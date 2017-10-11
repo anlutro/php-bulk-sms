@@ -7,8 +7,8 @@ php:
   - 7.0
   - 7.1
 
-install: composer install --dev --prefer-dist
+install: composer install --prefer-dist
 
-script: phpunit
+script: vendor/bin/phpunit
 
 sudo: false
