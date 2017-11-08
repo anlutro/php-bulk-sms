@@ -41,7 +41,7 @@ class BulkSmsServiceProvider extends ServiceProvider
     {
         $l5 = $this->l5 = version_compare(Application::VERSION, '5.0', '>=');
 
-        $this->app['bulksms'] = $this->app->share(function ($app) use($l5) {
+        $factory = function ($app) use($l5) {
             $delim = $l5 ? '.' : '::';
             $config = $app['config'];
             $username  = $config->get("bulk-sms{$delim}username");
@@ -51,7 +51,14 @@ class BulkSmsServiceProvider extends ServiceProvider
             $curl = isset($app['curl']) ? $app['curl'] : null;
 
             return new BulkSmsService($username, $password, $baseurl, $curl);
-        });
+        };
+
+        if (version_compare(Application::VERSION, '5.4', '>=')) {
+            $this->app->singleton('bulksms', $factory);
+        } else {
+            $this->app['bulksms'] = $this->app->share($factory);
+        }
+
 
         if ($l5) {
             $dir = dirname(dirname(__DIR__)).'/resources';
