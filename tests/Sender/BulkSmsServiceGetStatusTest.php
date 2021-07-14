@@ -15,8 +15,8 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'password' => 'bar',
             'batch_id' => '123445566'
         );
-        $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse = m::mock('anlutro\cURL\Response');
+        $mockResponse->statusCode = 200;
         $mockResponse->body = "0|Returns to follow\n\n";
         $mockResponse->body .= "1212121|11\n";
         $curl = $this->mockCurl();
@@ -49,7 +49,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'batch_id' => '123445566'
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = "0|Returns to follow\n\n";
         $mockResponse->body .= "1212121|11\n";
         $mockResponse->body .= "1212122|12\n";
@@ -76,7 +76,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'batch_id' => '123445566'
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = "0|Returns to follow\n\n";
         $mockResponse->body .= "\n";
         $curl = $this->mockCurl();
@@ -122,7 +122,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'batch_id' => '123445566'
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = "23|invalid credentials (username was: XXXXXXX)|\n";
         $curl               = $this->mockCurl();
         $curl->shouldReceive('get')->once()->with(
@@ -141,7 +141,7 @@ class BulkSmsServiceGetStatusTest extends PHPUnit_Framework_TestCase
             'batch_id' => '123445566'
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = "0|Returns to follow\n\n";
         $mockResponse->body .= "1212121|11\n";
         $curl = $this->mockCurl();

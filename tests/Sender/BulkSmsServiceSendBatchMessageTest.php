@@ -54,7 +54,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             'batch_data' => "msisdn,message\n\"4917610908093\",\"TestText\"",
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(
@@ -77,7 +77,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             'batch_data' => "msisdn,message\n\"4917610908093\",\"TestText\"\n\"4917610908094\",\"TestText2\"",
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(
@@ -102,7 +102,7 @@ class BulkSmsServiceSendBatchMessageTest extends PHPUnit_Framework_TestCase
             'routing_group' => 1,
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(

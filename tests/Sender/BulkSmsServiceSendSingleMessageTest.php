@@ -17,7 +17,7 @@ class BulkSmsServiceSendSingleMessageTest extends PHPUnit_Framework_TestCase
             'msisdn'   => '4712345678',
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(
@@ -74,7 +74,7 @@ class BulkSmsServiceSendSingleMessageTest extends PHPUnit_Framework_TestCase
             'msisdn'   => '4712345678',
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '99|ERROR|12345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->andReturn($mockResponse);
@@ -95,7 +95,7 @@ class BulkSmsServiceSendSingleMessageTest extends PHPUnit_Framework_TestCase
             'concat_text_sms_max_parts' => 2,
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(
@@ -122,7 +122,7 @@ class BulkSmsServiceSendSingleMessageTest extends PHPUnit_Framework_TestCase
             'concat_text_sms_max_parts' => 2,
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(
@@ -149,7 +149,7 @@ class BulkSmsServiceSendSingleMessageTest extends PHPUnit_Framework_TestCase
             'routing_group'             => 1,
         );
         $mockResponse       = m::mock('anlutro\cURL\Response');
-        $mockResponse->code = '200 OK';
+        $mockResponse->statusCode = 200;
         $mockResponse->body = '0|IN_PROGRESS|4712345678';
         $curl               = $this->mockCurl();
         $curl->shouldReceive('post')->once()->with(
