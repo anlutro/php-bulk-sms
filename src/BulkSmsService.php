@@ -157,7 +157,7 @@ class BulkSmsService
      */
     public function validateResponse($response)
     {
-        if ($response->code !== '200 OK') {
+        if (substr($response->code, 0,3) !== '200') {
             throw new BulkSmsException('BulkSMS API responded with HTTP status code ' . $response->code);
         }
 
