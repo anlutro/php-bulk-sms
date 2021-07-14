@@ -1,3 +1,7 @@
+***ARCHIVED 14 Jul 2021***
+----
+----
+
 # BulkSMS API - PHP implementation
 A simple implementation of BulkSMS for PHP.
 
